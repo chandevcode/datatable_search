@@ -1,14 +1,25 @@
-<p style="color: green"><%= notice %></p>
-
-<h1>Contacts</h1>
-
-<div id="contacts">
-  <% @contacts.each do |contact| %>
-    <%= render contact %>
-    <p>
-      <%= link_to "Show this contact", contact %>
-    </p>
-  <% end %>
+<div class="w-full">
+  <div class="flex justify-between items-center">
+    <h1 class="font-bold text-4xl">Contacts</h1>
+    <div class="">
+      <%= form_with url: contacts_path, method: :get, data: { controller: "form", action: "input->form#submit", turbo_frame: "contacts", turbo_action: "advance" } do %>
+        <%= text_field_tag "filter", nil, placeholder: "Filter", class: "inline-block rounded-md border border-gray-200 outline-none px-3 py-2  w-full" %>
+      <% end %>
+    </div>
+  </div>
+  <div class="min-w-full my-8">
+    <div class="table font-bold min-w-full">
+      <div>Name</div>
+      <div>Email</div>
+      <div>Age</div>
+      <div>Notes</div>
+      <div></div>
+    </div>
+    <%= turbo_frame_tag "new-contact-form", src: new_contact_path %>
+    <%= turbo_frame_tag "contacts" do %>
+      <%= render @contacts %>
+      <%== pagy_nav(@pagy, link_extra: 'data-turbo-action="advance"') %>
+    <% end %>
+  </div>
 </div>
 
-<%= link_to "New contact", new_contact_path %>
